@@ -5,7 +5,6 @@ setup(
     version='1.0.dev0',
     description='parking-v1',
     url='https://github.com/nevs-k/reinforcement_learning',
-    author='Edouard Leurent',
     author_email='nevsk@web.com',
     license='MIT',
     classifiers=[
