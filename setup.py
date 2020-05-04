@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='highway-env1',
+    name='highway_env1',
     version='1.0.dev0',
     description='parking-v1',
     url='https://github.com/nevs-k/reinforcement_learning',
