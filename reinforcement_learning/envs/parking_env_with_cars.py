@@ -16,6 +16,7 @@ from highway_env.vehicle.kinematics import Vehicle, Obstacle
 
 from highway_env.envs.parking_env import ParkingEnv
 
+from highway_env.road.objects import Landmark
 
 car_count = 8
 
