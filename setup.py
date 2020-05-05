@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(name='reinforcement_learning',
       version='0.1',
@@ -7,5 +7,5 @@ setup(name='reinforcement_learning',
       author='Sven Knoblauch',
       author_email='nevsk@web.com',
       license='MIT',
-      packages=['reinforcement_learning'],
+      packages=find_packages(),
       zip_safe=False)
