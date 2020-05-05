@@ -19,7 +19,7 @@ from highway_env.envs.parking_env import ParkingEnv
 
 car_count = 8
 
-class (ParkingEnv):
+class ParkingEnv_1(ParkingEnv):
     def _create_vehicles(self) -> None:
         self.vehicle = Vehicle(self.road, [0, 0], 2*np.pi*self.np_random.rand(), 0)
         self.road.vehicles.append(self.vehicle)
@@ -32,13 +32,13 @@ class (ParkingEnv):
             self.road.vehicles.append(vehicle2)
 
 
-        lane = positions[-1]ParkingEnv_WithCars
+        lane = positions[-1]
         self.goal = Obstacle(self.road, lane.position(lane.length/2, 0), heading=lane.heading)
         self.goal.COLLISIONS_ENABLED = False
         self.road.vehicles.insert(0, self.goal)
 
 register(
     id='parking-v1',
-    entry_point='reinforcement_learning:ParkingEnv_WithCars',
+    entry_point='parking_env_with_cars:ParkingEnv_1',
     max_episode_steps=100
 )
