@@ -33,9 +33,8 @@ class ParkingEnv_1(ParkingEnv):
 
 
         lane = positions[-1]
-        self.goal = Obstacle(self.road, lane.position(lane.length/2, 0), heading=lane.heading)
-        self.goal.COLLISIONS_ENABLED = False
-        self.road.vehicles.insert(0, self.goal)
+        self.goal = Landmark(self.road, lane.position(lane.length/2, 0), heading=lane.heading)
+        self.road.objects.append(self.goal)
 
 register(
     id='parking-v1',
