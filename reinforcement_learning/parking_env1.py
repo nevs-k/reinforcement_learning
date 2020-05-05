@@ -39,6 +39,6 @@ class ParkingEnv_1(ParkingEnv):
 
 register(
     id='parking-v1',
-    entry_point='parking_env1:ParkingEnv_1',
+    entry_point='reinforcement_learning:ParkingEnv_1',
     max_episode_steps=100
 )
