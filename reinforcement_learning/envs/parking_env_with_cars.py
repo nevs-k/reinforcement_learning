@@ -45,7 +45,7 @@ class ParkingEnv_1(ParkingEnv):
         config = super().default_config()
         config.update({
             "observation": {
-                "type": "KinematicObservation",
+                "type": "Kinematics",
                 "features": ['x', 'y', 'vx', 'vy', 'cos_h', 'sin_h'],
                 "scales": [100, 100, 5, 5, 1, 1],
                 "normalize": False
