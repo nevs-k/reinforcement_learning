@@ -37,6 +37,38 @@ class ParkingEnv_1(ParkingEnv):
         self.goal = Landmark(self.road, lane.position(lane.length/2, 0), heading=lane.heading)
         self.road.objects.append(self.goal)
 
+
+
+
+    @classmethod
+    def default_config(cls) -> dict:
+        config = super().default_config()
+        config.update({
+            "observation": {
+                "type": "KinematicObservation",
+                "features": ['x', 'y', 'vx', 'vy', 'cos_h', 'sin_h'],
+                "scales": [100, 100, 5, 5, 1, 1],
+                "normalize": False
+            },
+            "action": {
+                "type": "Continuous"
+            },
+            "simulation_frequency": 15,
+            "policy_frequency": 5,
+            "screen_width": 600,
+            "screen_height": 300,
+            "centering_position": [0.5, 0.5],
+            "scaling": 7
+        })
+        return config
+
+
+
+
+
+
+
+
 register(
     id='parking-v1',
     entry_point='reinforcement_learning.envs:ParkingEnv_1',
