@@ -10,7 +10,7 @@ from highway_env.road.lane import StraightLane, LineType
 from highway_env.road.road import Road, RoadNetwork
 from highway_env.vehicle.kinematics import Vehicle, Obstacle
 from highway_env.envs.parking_env import ParkingEnv
-from highway_env.envs.common.observation import observation_factory
+from reinforcement_learning.envs.observ import observation_factory
 from highway_env.road.objects import Landmark
 
 car_count = 8
@@ -21,7 +21,7 @@ class ParkingEnv_1(ParkingEnv):
         self.obsCars = None
         self.configKinematics = {
             "observation": {
-                "type": "Kinematics",
+                "type": "KinematicsGoalWithCars",
                 "features": ['x', 'y', 'vx', 'vy', 'cos_h', 'sin_h'],
                 "scales": [100, 100, 5, 5, 1, 1],
                 "normalize": False
@@ -32,8 +32,10 @@ class ParkingEnv_1(ParkingEnv):
     def define_spaces(self) -> None:
         self.observation = observation_factory(self, self.config["observation"])
         self.obsCars = observation_factory(self, self.configKinematics["observation"])
-        self.observation.space()["kinematics"] = self.obsCars.space
+        
+        
         self.observation_space = self.observation.space()
+        self.observation.space()["kinematics"] = self.obsCars.space
 
         if self.config["action"]["type"] == "Discrete":
             self.action_space = spaces.Discrete(len(self.ACTIONS))
