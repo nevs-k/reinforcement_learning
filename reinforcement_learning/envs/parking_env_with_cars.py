@@ -17,8 +17,7 @@ car_count = 8
 
 class ParkingEnv_1(ParkingEnv):
     
-    def __init__(self, config: dict = None) -> None:
-        super(ParkingEnv_1, self).__init__()
+    def __init__(self, config: dict = None) -> None:  
         self.obsCars = None
         self.configKinematics = {
             "observation": {
@@ -28,6 +27,7 @@ class ParkingEnv_1(ParkingEnv):
                 "normalize": False
             }
         }
+        super(ParkingEnv_1, self).__init__()
         
     def define_spaces(self) -> None:
         self.observation = observation_factory(self, self.config["observation"])
