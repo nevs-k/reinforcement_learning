@@ -13,7 +13,7 @@ from highway_env.envs.parking_env import ParkingEnv
 from reinforcement_learning.envs.observ import observation_factory
 from highway_env.road.objects import Landmark
 
-car_count = 8
+car_count = 20
 
 class ParkingEnv_1(ParkingEnv):
     
