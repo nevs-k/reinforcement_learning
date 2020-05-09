@@ -21,6 +21,27 @@ from highway_env.road.objects import Landmark
 car_count = 8
 
 class ParkingEnv_1(ParkingEnv):
+    
+    self.obsCars = None
+    
+    def define_spaces(self) -> None:
+        self.observation = observation_factory(self, self.config["observation"])
+        self.obsCars = observation_factory(self, "Kinematics")
+        self.observation.space()["kinematics"] = self.obsCars.space
+        self.observation_space = self.observation.space()
+
+        if self.config["action"]["type"] == "Discrete":
+            self.action_space = spaces.Discrete(len(self.ACTIONS))
+        elif self.config["action"]["type"] == "Continuous":
+            self.action_space = spaces.Box(-1., 1., shape=(2,), dtype=np.float32)
+            
+    def step(self, action: np.ndarray) -> Tuple[np.ndarray, float, bool, dict]:
+        obs, reward, terminal, info = super().step(action)
+        obs["kinematics"] = self.obsCars.observe()
+        info.update({"is_success": self._is_success(obs['achieved_goal'], obs['desired_goal'])})
+        return obs, reward, terminal, info
+
+        
     def _create_vehicles(self) -> None:
         self.vehicle = Vehicle(self.road, [0, 0], 2*np.pi*self.np_random.rand(), 0)
         self.road.vehicles.append(self.vehicle)
@@ -38,14 +59,14 @@ class ParkingEnv_1(ParkingEnv):
         self.road.objects.append(self.goal)
 
 
-
+    
 
     @classmethod
     def default_config(cls) -> dict:
         config = super().default_config()
         config.update({
             "observation": {
-                "type": "Kinematics",
+                "type": "KinematicsGoal",
                 "features": ['x', 'y', 'vx', 'vy', 'cos_h', 'sin_h'],
                 "scales": [100, 100, 5, 5, 1, 1],
                 "normalize": False
