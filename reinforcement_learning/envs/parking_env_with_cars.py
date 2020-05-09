@@ -22,7 +22,9 @@ car_count = 8
 
 class ParkingEnv_1(ParkingEnv):
     
-    self.obsCars = None
+    def __init__(self, config: dict = None) -> None:
+        super(ParkingEnv_1, self).__init__()
+        self.obsCars = None
     
     def define_spaces(self) -> None:
         self.observation = observation_factory(self, self.config["observation"])
