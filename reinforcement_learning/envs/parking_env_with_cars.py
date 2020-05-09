@@ -17,30 +17,27 @@ car_count = 8
 
 class ParkingEnv_1(ParkingEnv):
     
-    def __init__(self, config: dict = None) -> None:  
-        self.obsCars = None
-        self.configKinematics = {
+    @classmethod
+    def default_config(cls) -> dict:
+        config = super().default_config()
+        config.update({
             "observation": {
                 "type": "KinematicsGoalWithCars",
                 "features": ['x', 'y', 'vx', 'vy', 'cos_h', 'sin_h'],
                 "scales": [100, 100, 5, 5, 1, 1],
                 "normalize": False
-            }
-        }
-        super(ParkingEnv_1, self).__init__()
-        
-    def define_spaces(self) -> None:
-        self.observation = observation_factory(self, self.config["observation"])
-        self.obsCars = observation_factory(self, self.configKinematics["observation"])
-        
-        
-        self.observation_space = self.observation.space()
-        self.observation.space()["kinematics"] = self.obsCars.space
-
-        if self.config["action"]["type"] == "Discrete":
-            self.action_space = spaces.Discrete(len(self.ACTIONS))
-        elif self.config["action"]["type"] == "Continuous":
-            self.action_space = spaces.Box(-1., 1., shape=(2,), dtype=np.float32)
+            },
+            "action": {
+                "type": "Continuous"
+            },
+            "simulation_frequency": 15,
+            "policy_frequency": 5,
+            "screen_width": 600,
+            "screen_height": 300,
+            "centering_position": [0.5, 0.5],
+            "scaling": 7
+        })
+        return config
             
     def step(self, action: np.ndarray) -> Tuple[np.ndarray, float, bool, dict]:
         obs, reward, terminal, info = super().step(action)
