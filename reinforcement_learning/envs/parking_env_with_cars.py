@@ -41,7 +41,6 @@ class ParkingEnv_1(ParkingEnv):
             
     def step(self, action: np.ndarray) -> Tuple[np.ndarray, float, bool, dict]:
         obs, reward, terminal, info = super().step(action)
-        obs["kinematics"] = self.obsCars.observe()
         info.update({"is_success": self._is_success(obs['achieved_goal'], obs['desired_goal'])})
         return obs, reward, terminal, info
 
