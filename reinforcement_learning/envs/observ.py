@@ -34,15 +34,7 @@ class KinematicObservation(ObservationType):
                  normalize: bool = True,
                  observe_intentions: bool = False,
                  **kwargs: dict) -> None:
-        """
-        :param env: The environment to observe
-        :param features: Names of features used in the observation
-        :param vehicles_count: Number of observed vehicles
-        :param absolute: Use absolute coordinates
-        :param order: Order of observed vehicles. Values: sorted, shuffled
-        :param normalize: Should the observation be normalized
-        :param observe_intentions: Observe the destinations of other vehicles
-        """
+
         self.env = env
         self.features = features
         self.vehicles_count = vehicles_count
@@ -56,11 +48,6 @@ class KinematicObservation(ObservationType):
         return spaces.Box(shape=(self.vehicles_count, len(self.features)), low=-1, high=1, dtype=np.float32)
 
     def normalize_obs(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-            Normalize the observation values.
-            For now, assume that the road is straight along the x axis.
-        :param Dataframe df: observation data
-        """
         if not self.features_range:
             side_lanes = self.env.road.network.all_side_lanes(self.env.vehicle.lane_index)
             self.features_range = {
@@ -106,7 +93,7 @@ class KinematicObservation(ObservationType):
         # Flatten
         return obs
 
-class KinematicsGoalObservation(KinematicObservation):
+class KinematicsGoalObservationWithCars(KinematicObservation):
     def __init__(self, env: 'AbstractEnv', scales: List[float], **kwargs: dict) -> None:
         self.scales = np.array(scales)
         super().__init__(env, **kwargs)
@@ -118,12 +105,14 @@ class KinematicsGoalObservation(KinematicObservation):
                 desired_goal=spaces.Box(-np.inf, np.inf, shape=obs["desired_goal"].shape, dtype=np.float32),
                 achieved_goal=spaces.Box(-np.inf, np.inf, shape=obs["achieved_goal"].shape, dtype=np.float32),
                 observation=spaces.Box(-np.inf, np.inf, shape=obs["observation"].shape, dtype=np.float32),
+                observation=spaces.Box(-np.inf, np.inf, shape=obs["observation"].shape, dtype=np.float32)
             ))
         except AttributeError:
             return spaces.Space()
 
     def observe(self) -> Dict[str, np.ndarray]:
-        obs = np.ravel(pd.DataFrame.from_records([self.env.vehicle.to_dict()])[self.features])
+        obs = super(self).observe()
+        #obs = np.ravel(pd.DataFrame.from_records([self.env.vehicle.to_dict()])[self.features])
         goal = np.ravel(pd.DataFrame.from_records([self.env.goal.to_dict()])[self.features])
         obs = {
             "observation": obs / self.scales,
@@ -137,6 +126,6 @@ class KinematicsGoalObservation(KinematicObservation):
         
 def observation_factory(env: 'AbstractEnv', config: dict) -> ObservationType:
     if config["type"] == "KinematicsGoalWithCars":
-        return KinematicsGoalObservation(env, **config)
+        return KinematicsGoalObservationWithCars(env, **config)
     else:
         raise ValueError("Unknown observation type")
