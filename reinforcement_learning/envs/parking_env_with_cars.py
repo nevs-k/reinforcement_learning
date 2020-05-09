@@ -1,21 +1,16 @@
 import gym
 import highway_env
-
-#imports
 from typing import Tuple
-
 from gym.envs.registration import register
 from gym import GoalEnv
 import numpy as np
 from numpy.core._multiarray_umath import ndarray
-
 from highway_env.envs.common.abstract import AbstractEnv
 from highway_env.road.lane import StraightLane, LineType
 from highway_env.road.road import Road, RoadNetwork
 from highway_env.vehicle.kinematics import Vehicle, Obstacle
-
 from highway_env.envs.parking_env import ParkingEnv
-
+from highway_env.envs.common.observation import observation_factory
 from highway_env.road.objects import Landmark
 
 car_count = 8
