@@ -20,10 +20,34 @@ class ParkingEnv_1(ParkingEnv):
     def __init__(self, config: dict = None) -> None:
         super(ParkingEnv_1, self).__init__()
         self.obsCars = None
+        self.configKinematics = self.default_config_kinematics()
     
+    #confi 2 for kinematics
+    @classmethod
+    def default_config_kinematics(cls) -> dict:
+        config = super().default_config()
+        config.update({
+            "observation": {
+                "type": "Kinematics",
+                "features": ['x', 'y', 'vx', 'vy', 'cos_h', 'sin_h'],
+                "scales": [100, 100, 5, 5, 1, 1],
+                "normalize": False
+            },
+            "action": {
+                "type": "Continuous"
+            },
+            "simulation_frequency": 15,
+            "policy_frequency": 5,
+            "screen_width": 600,
+            "screen_height": 300,
+            "centering_position": [0.5, 0.5],
+            "scaling": 7
+        })
+        return config
+        
     def define_spaces(self) -> None:
         self.observation = observation_factory(self, self.config["observation"])
-        self.obsCars = observation_factory(self, "Kinematics")
+        self.obsCars = observation_factory(self, self.configKinematics["observation"])
         self.observation.space()["kinematics"] = self.obsCars.space
         self.observation_space = self.observation.space()
 
