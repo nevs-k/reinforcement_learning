@@ -27,6 +27,7 @@ class ParkingEnv_1(ParkingEnv):
                 "scales": [100, 100, 5, 5, 1, 1],
                 "normalize": False
             }
+        }
         
     def define_spaces(self) -> None:
         self.observation = observation_factory(self, self.config["observation"])
