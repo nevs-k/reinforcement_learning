@@ -12,7 +12,6 @@ from highway_env.vehicle.kinematics import Vehicle, Obstacle
 from highway_env.envs.parking_env import ParkingEnv
 from highway_env.road.objects import Landmark
 
-car_count = 20
 
 class ParkingEnv_1(ParkingEnv):
     
@@ -48,8 +47,9 @@ class ParkingEnv_1(ParkingEnv):
         self.vehicle = Vehicle(self.road, [0, 0], 2*np.pi*self.np_random.rand(), 0)
         self.road.vehicles.append(self.vehicle)
 
-        positions = self.np_random.choice(self.road.network.lanes_list(), size=car_count+1, replace=False)
 
+        """
+        positions = self.np_random.choice(self.road.network.lanes_list(), size=car_count+1, replace=False)
         for x in range(car_count):
             lane2 = positions[x]
             vehicle2 =  Vehicle(self.road, lane2.position(lane2.length/2, 0), lane2.heading, 0)
@@ -59,7 +59,30 @@ class ParkingEnv_1(ParkingEnv):
         lane = positions[-1]
         self.goal = Landmark(self.road, lane.position(lane.length/2, 0), heading=lane.heading)
         self.road.objects.append(self.goal)
+        """
 
+        
+        """
+        add vehicels to free parking slots
+        """
+        spots = len(self.road.network.lanes_list())
+        lane_pos = self.np_random.choice(spots)
+        lane = self.road.network.lanes_list()[lane_pos]
+        self.goal = Landmark(self.road, lane.position(lane.length/2, 0), heading=lane.heading)
+        self.road.objects.append(self.goal)
+        for x in spots:
+            if x != lane_pos:
+                lane_tmp = positions[x]
+                vehicle_tmp =  Vehicle(self.road, lane_tmp.position(lane_tmp.length/2, 0), lane_tmp.heading, 0)
+                self.road.vehicles.append(vehicle_tmp)
+
+
+    """
+    add collision reward for vehicels
+    """
+    def compute_reward(self, achieved_goal: np.ndarray, desired_goal: np.ndarray, info: dict, p: float = 0.5) -> float:
+        collision_reward = self.vehicle.crashed * (-3)        
+        return -np.power(np.dot(np.abs(achieved_goal - desired_goal), self.REWARD_WEIGHTS), p) + collision_reward
 
 
 
