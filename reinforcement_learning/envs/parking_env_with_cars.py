@@ -70,7 +70,7 @@ class ParkingEnv_1(ParkingEnv):
         lane = self.road.network.lanes_list()[lane_pos]
         self.goal = Landmark(self.road, lane.position(lane.length/2, 0), heading=lane.heading)
         self.road.objects.append(self.goal)
-        for x in spots:
+        for x in range(spots):
             if x != lane_pos:
                 lane_tmp = positions[x]
                 vehicle_tmp =  Vehicle(self.road, lane_tmp.position(lane_tmp.length/2, 0), lane_tmp.heading, 0)
