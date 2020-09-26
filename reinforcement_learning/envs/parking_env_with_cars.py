@@ -10,8 +10,6 @@ from highway_env.road.lane import StraightLane, LineType
 from highway_env.road.road import Road, RoadNetwork
 from highway_env.vehicle.kinematics import Vehicle, Obstacle
 from highway_env.envs.parking_env import ParkingEnv
-from reinforcement_learning.envs.observ import observation_factory
-from highway_env.road.objects import Landmark
 
 car_count = 20
 
