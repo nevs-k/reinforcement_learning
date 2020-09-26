@@ -81,7 +81,7 @@ class ParkingEnv_1(ParkingEnv):
     add collision reward for vehicels
     """
     def compute_reward(self, achieved_goal: np.ndarray, desired_goal: np.ndarray, info: dict, p: float = 0.5) -> float:
-        collision_reward = self.vehicle.crashed * (-3)        
+        collision_reward = self.vehicle.crashed * (-5)        
         return -np.power(np.dot(np.abs(achieved_goal - desired_goal), self.REWARD_WEIGHTS), p) + collision_reward
 
 
